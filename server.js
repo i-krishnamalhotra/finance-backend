@@ -29,22 +29,3 @@ app.get('/api/data', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-3. Create a second file named `package.json` in the same repo with this text:
-
-```json
-{
-  "name": "finance-backend",
-  "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "dependencies": {
-    "express": "^4.18.2",
-    "sqlite3": "^5.1.6",
-    "cors": "^2.8.5"
-  }
-}
-
-4. Go to **Render.com**, click **New -> Web Service**, and connect that new GitHub repository.
-5. In Render's settings, make sure you add a **Disk** to the service and mount it to `/opt/render/project/src` so the `.db` file isn't wiped when Render restarts. (You can also change `const db = new sqlite3.Database('/opt/render/project/src/finance.db')` in the code).
-
-Once Render is live, it will give you a URL (like `https://finance-backend.onrender.com`). Go to your `index.html` file (hosted on GitHub Pages), click **Setup Render DB**, and paste that URL in!
