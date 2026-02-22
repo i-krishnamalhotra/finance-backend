@@ -129,8 +129,8 @@
     <!-- Summary Overview -->
     <section class="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 print-grid">
         <!-- Starting Balance Input -->
-        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg print-card flex flex-col justify-center">
-            <label class="text-slate-400 text-xs md:text-sm font-medium mb-2 uppercase tracking-wider print-text">Starting Balance</label>
+        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg print-card flex flex-col justify-center overflow-hidden">
+            <label class="text-slate-400 text-xs md:text-sm font-medium mb-2 uppercase tracking-wider print-text truncate">Starting Balance</label>
             <div class="relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">₹</span>
                 <input id="startingAmount" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-lg md:text-xl font-bold focus:ring-2 focus:ring-primary focus:border-primary transition-all print-text">
@@ -138,25 +138,25 @@
         </div>
 
         <!-- Calculated Summaries -->
-        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-success print-card">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text">Total Income (+)</p>
-            <h2 id="totalIncomes" class="text-xl md:text-2xl font-bold text-success print-text">₹0</h2>
+        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-success print-card overflow-hidden">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate">Total Income (+)</p>
+            <h2 id="totalIncomes" class="text-xl md:text-2xl font-bold text-success print-text truncate">₹0</h2>
         </div>
         
-        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-danger print-card">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text">Expenses (-)</p>
-            <h2 id="totalExpenses" class="text-xl md:text-2xl font-bold text-danger print-text">₹0</h2>
+        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-danger print-card overflow-hidden">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate">Expenses (-)</p>
+            <h2 id="totalExpenses" class="text-xl md:text-2xl font-bold text-danger print-text truncate">₹0</h2>
         </div>
 
-        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-warning print-card">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text" title="Money lent out or cash withdrawn">Cash / Debt (-)</p>
-            <h2 id="totalReceivables" class="text-xl md:text-2xl font-bold text-warning print-text">₹0</h2>
+        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-warning print-card overflow-hidden">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate" title="Money lent out or cash withdrawn">Cash / Debt (-)</p>
+            <h2 id="totalReceivables" class="text-xl md:text-2xl font-bold text-warning print-text truncate">₹0</h2>
         </div>
 
-        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-primary print-card bg-primary/5">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text">Bank Balance</p>
-            <h2 id="currentBalance" class="text-2xl md:text-3xl font-bold text-primary print-text">₹0</h2>
-            <p id="totalWealth" class="text-xs text-slate-500 mt-1 print-text">Total Wealth: ₹0</p>
+        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-primary print-card bg-primary/5 overflow-hidden">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate">Bank Balance</p>
+            <h2 id="currentBalance" class="text-2xl md:text-3xl font-bold text-primary print-text truncate">₹0</h2>
+            <p id="totalWealth" class="text-xs text-slate-500 mt-1 print-text truncate">Total Wealth: ₹0</p>
         </div>
     </section>
 
@@ -166,16 +166,16 @@
         <!-- INCOMES BLOCK -->
         <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col print-card">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl">
-                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text">
-                    <i data-lucide="arrow-down-to-line" class="text-success no-print w-5 h-5"></i> Incomes
+                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text truncate">
+                    <i data-lucide="arrow-down-to-line" class="text-success no-print w-5 h-5 flex-shrink-0"></i> Incomes
                 </h3>
             </div>
             <!-- Add Form -->
             <div class="p-3 no-print border-b border-slate-800 bg-slate-900/30">
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="newIncName" placeholder="Source (e.g. Salary)" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success">
-                    <input id="newIncAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-28 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success">
-                    <button id="addIncome" class="bg-success hover:bg-emerald-500 text-dark px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto">
+                    <input id="newIncName" placeholder="Source (e.g. Salary)" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success">
+                    <input id="newIncAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success">
+                    <button id="addIncome" class="bg-success hover:bg-emerald-500 text-dark px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
@@ -187,16 +187,16 @@
         <!-- EXPENSES BLOCK -->
         <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col print-card">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl">
-                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text">
-                    <i data-lucide="arrow-up-from-line" class="text-danger no-print w-5 h-5"></i> Expenses
+                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text truncate">
+                    <i data-lucide="arrow-up-from-line" class="text-danger no-print w-5 h-5 flex-shrink-0"></i> Expenses
                 </h3>
             </div>
             <!-- Add Form -->
             <div class="p-3 no-print border-b border-slate-800 bg-slate-900/30">
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="newExpName" placeholder="What did you spend on?" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger">
-                    <input id="newExpAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-28 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger">
-                    <button id="addExpense" class="bg-danger hover:bg-rose-500 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto">
+                    <input id="newExpName" placeholder="What did you spend on?" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger">
+                    <input id="newExpAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger">
+                    <button id="addExpense" class="bg-danger hover:bg-rose-500 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
@@ -208,16 +208,16 @@
         <!-- RECEIVABLES / DEBT / CASH BLOCK -->
         <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col print-card">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl">
-                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text">
-                    <i data-lucide="banknote" class="text-warning no-print w-5 h-5"></i> Receivables / Cash Out
+                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text truncate">
+                    <i data-lucide="banknote" class="text-warning no-print w-5 h-5 flex-shrink-0"></i> Receivables / Cash Out
                 </h3>
             </div>
             <!-- Add Form -->
             <div class="p-3 no-print border-b border-slate-800 bg-slate-900/30">
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="newRecName" placeholder="Who/What? (e.g. ATM)" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning">
-                    <input id="newRecAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-28 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning">
-                    <button id="addReceivable" class="bg-warning hover:bg-amber-400 text-dark px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto">
+                    <input id="newRecName" placeholder="Who/What? (e.g. ATM)" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning">
+                    <input id="newRecAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning">
+                    <button id="addReceivable" class="bg-warning hover:bg-amber-400 text-dark px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
@@ -801,10 +801,10 @@
             card.innerHTML = `
                 <!-- Top Row: Name & Amount -->
                 <div class="flex justify-between items-start gap-2">
-                    <input oninput="updateItem('${arrName}', '${x.id}', 'name', this.value)" class="flex-1 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 font-medium truncate print-text" value="${x.name}">
-                    <div class="flex items-center gap-1 font-bold text-base print-text">
+                    <input oninput="updateItem('${arrName}', '${x.id}', 'name', this.value)" class="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 font-medium truncate print-text" value="${x.name}">
+                    <div class="flex items-center gap-1 font-bold text-base print-text flex-shrink-0">
                         <span class="text-slate-500">₹</span>
-                        <input oninput="updateItem('${arrName}', '${x.id}', 'amt', this.value)" type="number" class="w-20 md:w-24 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 text-right" value="${x.amt}">
+                        <input oninput="updateItem('${arrName}', '${x.id}', 'amt', this.value)" type="number" class="w-20 md:w-24 min-w-0 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 text-right" value="${x.amt}">
                     </div>
                 </div>
                 
