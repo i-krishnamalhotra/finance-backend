@@ -59,133 +59,233 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        /* Screen-only display classes */
-        @media screen {
-            .print-only { display: none !important; }
+        
+        /* Fix for select dropdown options in dark mode (prevents white-on-white text) */
+        select option {
+            background-color: #1e293b;
+            color: #f8fafc;
         }
 
-        /* Print Styles - Professional Portrait PDF layout */
+        /* Logic to hide print elements on screen */
+        .print-only-block, .print-header { display: none; }
+
+        /* Print Styles - BULLETPROOF Professional Portrait PDF layout */
         @media print {
             @page {
                 size: A4 portrait;
                 margin: 15mm;
             }
+            
+            /* CSS RESETS FOR PRINT ENGINE STABILITY */
+            * {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                box-sizing: border-box !important;
+            }
             body { 
                 background: #ffffff !important; 
                 color: #000000 !important; 
                 padding: 0 !important;
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact;
+                margin: 0 !important;
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
                 font-family: 'Inter', sans-serif !important;
-            }
-            
-            /* CRITICAL FIX: Chrome fails to print elements with backdrop-filter. This removes the blur entirely for PDF. */
-            * {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
             }
 
             .no-print { display: none !important; }
-            .print-only { display: flex !important; }
-            
-            /* Remove padding from main wrapper to maximize space */
+            .print-only-block { display: block !important; }
+            header { display: none !important; } /* Hide the interactive app header */
             .max-w-7xl { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
             
-            /* Clean white cards with sharp borders */
-            .print-card { 
-                border: 1px solid #cbd5e1 !important; 
-                box-shadow: none !important; 
-                background: #ffffff !important; 
-                color: #000000 !important; 
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-            .print-text { color: #000000 !important; }
-            
-            /* PERFECT PORTRAIT SUMMARY GRID: 5 boxes balanced into 2 rows */
-            .print-grid { 
-                display: grid !important; 
-                grid-template-columns: repeat(6, 1fr) !important;
-                grid-template-rows: auto auto !important;
-                gap: 12px !important; 
+            /* PRINT HEADER */
+            .print-header {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: flex-end !important;
+                border-bottom: 2px solid #cbd5e1 !important;
+                padding-bottom: 12px !important;
                 margin-bottom: 24px !important;
-            }
-            .print-grid > div {
-                min-width: 0 !important;
-                padding: 12px !important;
-                border-radius: 6px !important;
-                border: 1px solid #cbd5e1 !important;
-                background: #f8fafc !important; /* Light gray background for contrast */
-            }
-            
-            /* Row 1: Starting Balance & Bank Balance */
-            .print-grid > div:nth-child(1) { grid-column: 1 / span 3 !important; grid-row: 1 !important; }
-            .print-grid > div:nth-child(5) { grid-column: 4 / span 3 !important; grid-row: 1 !important; background: #eff6ff !important; }
-            
-            /* Row 2: Incomes, Expenses, Receivables */
-            .print-grid > div:nth-child(2) { grid-column: 1 / span 2 !important; grid-row: 2 !important; }
-            .print-grid > div:nth-child(3) { grid-column: 3 / span 2 !important; grid-row: 2 !important; }
-            .print-grid > div:nth-child(4) { grid-column: 5 / span 2 !important; grid-row: 2 !important; }
-            
-            /* MASONRY 2-COLUMN LAYOUT FOR LISTS to prevent weird stretching */
-            .grid.lg\:grid-cols-3 {
-                display: block !important;
-                column-count: 2 !important;
-                column-gap: 20px !important;
-            }
-            .grid.lg\:grid-cols-3 > div {
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-                margin-bottom: 20px !important;
-                display: inline-block !important; /* Prevents column clipping */
                 width: 100% !important;
             }
             
-            /* Strip input styling so it looks like raw text */
-            input, textarea { 
-                border: none !important; 
-                background: transparent !important; 
-                color: #000000 !important; 
-                padding: 0 !important; 
-                resize: none; 
+            /* UNIFIED PROFESSIONAL SUMMARY TABLE (Replaces messy boxes) */
+            .print-grid { 
+                display: flex !important; 
+                flex-wrap: wrap !important;
+                width: 100% !important;
+                margin-bottom: 32px !important;
+                border: 2px solid #0f172a !important; /* Thick dark boundary */
+                border-radius: 8px !important;
+                background: #ffffff !important;
+                page-break-inside: avoid !important;
+                gap: 0 !important; /* Strict table layout */
                 overflow: hidden !important;
+            }
+            
+            .print-grid > div {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                padding: 16px 20px !important;
+                border-radius: 0 !important;
+                border: none !important;
+                background: transparent !important;
+                min-width: 0 !important;
+                box-sizing: border-box !important;
+            }
+            
+            /* Row 1: Starting Balance, Total Income, Expenses */
+            .print-grid > div:nth-child(1), 
+            .print-grid > div:nth-child(2), 
+            .print-grid > div:nth-child(3) { 
+                flex: 0 0 33.33% !important; 
+                max-width: 33.33% !important;
+                border-bottom: 1px solid #cbd5e1 !important;
+            }
+            .print-grid > div:nth-child(1), 
+            .print-grid > div:nth-child(2) {
+                border-right: 1px solid #cbd5e1 !important;
+            }
+
+            /* Row 2: Cash / Debt, Bank Balance */
+            .print-grid > div:nth-child(4) { 
+                flex: 0 0 40% !important; 
+                max-width: 40% !important;
+                border-right: 1px solid #cbd5e1 !important;
+            }
+            .print-grid > div:nth-child(5) { 
+                flex: 0 0 60% !important; 
+                max-width: 60% !important;
+                background: #f8fafc !important; /* Subtle emphasis background */
+            }
+            
+            /* Print Summary Typography */
+            .print-grid label,
+            .print-grid p {
+                font-size: 9pt !important;
+                color: #64748b !important;
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.5px !important;
+                margin: 0 0 4px 0 !important;
+            }
+            .print-grid h2, 
+            .print-grid .print-only-block {
+                font-size: 16pt !important;
+                font-weight: 800 !important;
+                margin: 0 !important;
+                line-height: 1.2 !important;
+                word-break: break-word !important;
+            }
+            
+            /* Standout formatting specifically for the final Bank Balance */
+            .print-grid > div:nth-child(5) p:first-child { 
+                color: #0f172a !important; 
                 font-size: 10pt !important;
+            }
+            .print-grid > div:nth-child(5) h2 { 
+                font-size: 24pt !important; 
+                color: #2563eb !important; 
+            }
+            .print-grid > div:nth-child(5) p:last-child {
+                font-size: 9pt !important;
+                color: #64748b !important;
+                margin-top: 6px !important;
+                text-transform: none !important;
+                letter-spacing: normal !important;
+                font-weight: 500 !important;
+            }
+            
+            /* FULL WIDTH LIST CONTAINER */
+            .print-lists-container {
+                display: block !important;
+                width: 100% !important;
+            }
+            
+            .print-lists-container > div {
+                display: block !important;
+                width: 100% !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 8px !important;
+                background: #ffffff !important;
+                margin-bottom: 24px !important;
+                page-break-inside: auto !important; /* Allows long lists to naturally flow to page 2 */
+            }
+            
+            /* List Section Headers */
+            .print-card-header {
+                background: #f1f5f9 !important;
+                padding: 10px 16px !important;
+                border-bottom: 2px solid #cbd5e1 !important;
+                border-top-left-radius: 8px !important;
+                border-top-right-radius: 8px !important;
+            }
+            .print-card-header h3 {
+                font-size: 12pt !important;
+                font-weight: 800 !important;
+                margin: 0 !important;
+                color: #0f172a !important;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .print-card-header i { display: none !important; }
+            
+            /* List Items */
+            .print-item {
+                display: block !important;
+                border-bottom: 1px solid #e2e8f0 !important;
+                padding: 10px 16px !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background: transparent !important;
+            }
+            .print-item:last-child { border-bottom: none !important; }
+
+            .print-item-top {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+            }
+            .print-item-name {
+                flex: 1 !important;
+                font-weight: 700 !important;
+                font-size: 11pt !important;
+                color: #0f172a !important;
+                word-wrap: break-word !important;
+                line-height: 1.3 !important;
+            }
+            .print-item-amt {
+                flex-shrink: 0 !important;
+                font-weight: 800 !important;
+                font-size: 12pt !important;
+                color: #0f172a !important;
+            }
+            .print-item-notes {
+                margin-top: 6px !important;
+                font-size: 9.5pt !important;
+                color: #475569 !important;
+                white-space: pre-wrap !important;
                 line-height: 1.4 !important;
             }
-            textarea { display: block; width: 100%; white-space: pre-wrap; }
-            
-            /* Hide the interactive app header entirely */
-            header { display: none !important; } 
-            
-            /* List item styling */
-            #incomesBody > div, #expensesBody > div, #receivablesBody > div {
-                border-bottom: 1px solid #e2e8f0 !important;
-                padding: 10px 0 !important;
-                background: transparent !important;
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
+            .print-item-images { margin-top: 8px !important; }
             
             /* Small, neat images for PDF */
             img { 
-                max-width: 50px !important; 
-                max-height: 50px !important; 
+                max-width: 45px !important; 
+                max-height: 45px !important; 
                 border: 1px solid #cbd5e1 !important;
                 border-radius: 4px !important;
                 display: inline-block !important;
+                margin-right: 6px !important;
             }
             
-            /* Proper specific colors for print mode */
-            .border-success { border-left-width: 4px !important; border-left-color: #10b981 !important; }
-            .border-danger { border-left-width: 4px !important; border-left-color: #ef4444 !important; }
-            .border-warning { border-left-width: 4px !important; border-left-color: #f59e0b !important; }
-            .border-primary { border-left-width: 4px !important; border-left-color: #3b82f6 !important; }
-            
+            /* Typography colors for print */
             .text-success { color: #059669 !important; } 
             .text-danger { color: #dc2626 !important; }   
             .text-warning { color: #d97706 !important; }  
             .text-primary { color: #2563eb !important; }  
+            .text-slate-400, .text-slate-500 { color: #64748b !important; }
         }
     </style>
 </head>
@@ -194,18 +294,18 @@
 <div class="max-w-7xl mx-auto space-y-6">
     
     <!-- Header Section -->
-    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-5 md:p-6 rounded-2xl shadow-lg border border-slate-800 print-card">
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-5 md:p-6 rounded-2xl shadow-lg border border-slate-800">
         <div class="w-full md:w-auto">
-            <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2 print-text">
-                <i data-lucide="wallet" class="text-primary no-print"></i>
+            <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2 text-white">
+                <i data-lucide="wallet" class="text-primary"></i>
                 Financial Dashboard
-                <span id="syncStatus" class="ml-2 px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] text-slate-400 font-normal flex items-center gap-1 mt-1 no-print">
+                <span id="syncStatus" class="ml-2 px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] text-slate-400 font-normal flex items-center gap-1 mt-1">
                     <i data-lucide="database" class="w-3 h-3 text-success"></i> Local DB Active
                 </span>
             </h1>
             
             <!-- TIMELINE & SETTINGS CONTROLS -->
-            <div class="flex items-center gap-2 mt-3 no-print bg-slate-900 p-2 rounded-lg border border-slate-700 overflow-x-auto">
+            <div class="flex items-center gap-2 mt-3 bg-slate-900 p-2 rounded-lg border border-slate-700 overflow-x-auto">
                 <i data-lucide="calendar" class="w-4 h-4 text-slate-400 ml-1 shrink-0"></i>
                 <select id="timelineSelector" class="bg-transparent text-sm text-white font-medium focus:outline-none cursor-pointer border-r border-slate-700 pr-2 shrink-0">
                     <!-- Options populated by JS -->
@@ -222,14 +322,14 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 md:gap-3 w-full md:w-auto no-print">
+        <div class="flex flex-wrap gap-2 md:gap-3 w-full md:w-auto">
             <button id="btnInstallPWA" class="hidden flex-1 md:flex-none justify-center items-center gap-2 px-3 py-2 bg-success/20 hover:bg-success/30 text-success border border-success/50 rounded-lg transition-colors text-xs md:text-sm font-medium" title="Install App">
                 <i data-lucide="smartphone" class="w-4 h-4"></i> Install App
             </button>
-            <button onclick="window.print()" class="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-xs md:text-sm font-medium">
+            <button onclick="window.print()" class="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-xs md:text-sm font-medium text-white">
                 <i data-lucide="file-text" class="w-4 h-4"></i> Export PDF
             </button>
-            <button id="btnExportJSON" class="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-xs md:text-sm font-medium">
+            <button id="btnExportJSON" class="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-xs md:text-sm font-medium text-white">
                 <i data-lucide="download" class="w-4 h-4"></i> Backup
             </button>
             <button id="btnImportJSON" class="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-primary hover:bg-sky-400 text-dark rounded-lg transition-colors text-xs md:text-sm font-medium">
@@ -239,118 +339,118 @@
         </div>
     </header>
 
-    <!-- PDF Title & Metadata (Professional Branding for PDF) -->
-    <div class="print-only flex-col border-b-2 border-slate-300 pb-4 mb-6">
-        <div class="flex justify-between items-end">
-            <div>
-                <h2 id="printTitle" class="text-3xl font-black text-black uppercase tracking-tighter">Financial Statement</h2>
-                <p id="printSubtitle" class="text-lg text-slate-700 font-medium mt-1">Current Sheet</p>
-            </div>
-            <div class="text-right">
-                <p class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-1">Report Date</p>
-                <p id="currentDate" class="text-base font-bold text-black"></p>
-            </div>
+    <!-- PDF Title & Metadata (Visible strictly during Print) -->
+    <div class="print-header">
+        <div style="flex: 1;">
+            <h2 id="printTitle" style="font-size: 24pt; font-weight: 900; margin: 0; text-transform: uppercase; line-height: 1.1; color: black;">Financial Statement</h2>
+            <p id="printSubtitle" style="font-size: 14pt; color: #475569; margin: 4px 0 0 0; font-weight: 600;">Current Sheet</p>
+        </div>
+        <div style="text-align: right;">
+            <p style="font-size: 10pt; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: bold; margin: 0;">Report Date</p>
+            <p id="currentDate" style="font-size: 12pt; font-weight: bold; margin: 2px 0 0 0; color: black;"></p>
         </div>
     </div>
 
     <!-- Summary Overview -->
     <section class="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 print-grid">
         <!-- Starting Balance Input -->
-        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg print-card flex flex-col justify-center overflow-hidden">
-            <label class="text-slate-400 text-xs md:text-sm font-medium mb-2 uppercase tracking-wider print-text truncate">Starting Balance</label>
-            <div class="relative flex items-center gap-1">
-                <span class="text-slate-400 font-bold print-text">₹</span>
-                <input id="startingAmount" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-2 text-lg md:text-xl font-bold focus:ring-2 focus:ring-primary focus:border-primary transition-all print-text">
+        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg">
+            <label class="text-slate-400 text-xs md:text-sm font-medium mb-2 uppercase tracking-wider block">Starting Balance</label>
+            <div class="relative flex items-center gap-1 no-print">
+                <span class="text-slate-400 font-bold">₹</span>
+                <input id="startingAmount" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-2 text-lg md:text-xl font-bold focus:ring-2 focus:ring-primary focus:border-primary transition-all text-white">
             </div>
+            <!-- Clean text display for print only -->
+            <div class="print-only-block print-text">₹<span id="printStartingAmt">0</span></div>
         </div>
 
         <!-- Calculated Summaries -->
-        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-success print-card overflow-hidden">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate">Total Income (+)</p>
-            <h2 id="totalIncomes" class="text-xl md:text-2xl font-bold text-success print-text truncate">₹0</h2>
+        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-success">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Total Income (+)</p>
+            <h2 id="totalIncomes" class="text-xl md:text-2xl font-bold text-success">₹0</h2>
         </div>
         
-        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-danger print-card overflow-hidden">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate">Expenses (-)</p>
-            <h2 id="totalExpenses" class="text-xl md:text-2xl font-bold text-danger print-text truncate">₹0</h2>
+        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-danger">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Expenses (-)</p>
+            <h2 id="totalExpenses" class="text-xl md:text-2xl font-bold text-danger">₹0</h2>
         </div>
 
-        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-warning print-card overflow-hidden">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate" title="Money lent out or cash withdrawn">Cash / Debt (-)</p>
-            <h2 id="totalReceivables" class="text-xl md:text-2xl font-bold text-warning print-text truncate">₹0</h2>
+        <div class="glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-warning">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider" title="Money lent out or cash withdrawn">Cash / Debt (-)</p>
+            <h2 id="totalReceivables" class="text-xl md:text-2xl font-bold text-warning">₹0</h2>
         </div>
 
-        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-primary print-card bg-primary/5 overflow-hidden">
-            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider print-text truncate">Bank Balance</p>
-            <h2 id="currentBalance" class="text-2xl md:text-3xl font-bold text-primary print-text truncate">₹0</h2>
-            <p id="totalWealth" class="text-xs text-slate-500 mt-1 print-text truncate">Total Wealth: ₹0</p>
+        <div class="col-span-2 lg:col-span-1 glass-effect p-4 md:p-5 rounded-2xl shadow-lg border-l-4 border-primary bg-primary/5">
+            <p class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Bank Balance</p>
+            <h2 id="currentBalance" class="text-2xl md:text-3xl font-bold text-primary">₹0</h2>
+            <p id="totalWealth" class="text-xs text-slate-500 mt-1">Total Wealth: ₹0</p>
         </div>
     </section>
 
-    <!-- Main Content Area: 3 Columns / Rows -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content Area: 3 Columns -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 print-lists-container">
         
         <!-- INCOMES BLOCK -->
-        <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col print-card">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl">
-                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text truncate w-full">
-                    <i data-lucide="arrow-down-to-line" class="text-success no-print w-5 h-5 flex-shrink-0"></i> Incomes
+        <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl print-card-header">
+                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 text-white print-text w-full">
+                    <i data-lucide="arrow-down-to-line" class="text-success w-5 h-5 flex-shrink-0"></i> Incomes
                 </h3>
             </div>
             <!-- Add Form -->
             <div class="p-3 no-print border-b border-slate-800 bg-slate-900/30">
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="newIncName" placeholder="Source (e.g. Salary)" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success">
-                    <input id="newIncAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success">
+                    <input id="newIncName" placeholder="Source (e.g. Salary)" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success text-white">
+                    <input id="newIncAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-success text-white">
                     <button id="addIncome" class="bg-success hover:bg-emerald-500 text-dark px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
             </div>
             <!-- List -->
-            <div id="incomesBody" class="flex flex-col divide-y divide-slate-800/50 p-2 text-sm"></div>
+            <div id="incomesBody" class="flex flex-col text-sm"></div>
         </div>
 
         <!-- EXPENSES BLOCK -->
-        <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col print-card">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl">
-                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text truncate w-full">
-                    <i data-lucide="arrow-up-from-line" class="text-danger no-print w-5 h-5 flex-shrink-0"></i> Expenses
+        <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl print-card-header">
+                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 text-white print-text w-full">
+                    <i data-lucide="arrow-up-from-line" class="text-danger w-5 h-5 flex-shrink-0"></i> Expenses
                 </h3>
             </div>
             <!-- Add Form -->
             <div class="p-3 no-print border-b border-slate-800 bg-slate-900/30">
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="newExpName" placeholder="What did you spend on?" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger">
-                    <input id="newExpAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger">
+                    <input id="newExpName" placeholder="What did you spend on?" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger text-white">
+                    <input id="newExpAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-danger text-white">
                     <button id="addExpense" class="bg-danger hover:bg-rose-500 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
             </div>
             <!-- List -->
-            <div id="expensesBody" class="flex flex-col divide-y divide-slate-800/50 p-2 text-sm"></div>
+            <div id="expensesBody" class="flex flex-col text-sm"></div>
         </div>
 
         <!-- RECEIVABLES / DEBT / CASH BLOCK -->
-        <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col print-card">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl">
-                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 print-text truncate w-full">
-                    <i data-lucide="banknote" class="text-warning no-print w-5 h-5 flex-shrink-0"></i> Receivables / Cash Out
+        <div class="bg-card rounded-2xl shadow-xl border border-slate-800 flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/20 rounded-t-2xl print-card-header">
+                <h3 class="text-md md:text-lg font-bold flex items-center gap-2 text-white print-text w-full">
+                    <i data-lucide="banknote" class="text-warning w-5 h-5 flex-shrink-0"></i> Receivables / Cash Out
                 </h3>
             </div>
             <!-- Add Form -->
             <div class="p-3 no-print border-b border-slate-800 bg-slate-900/30">
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <input id="newRecName" placeholder="Who/What? (e.g. ATM)" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning">
-                    <input id="newRecAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning">
+                    <input id="newRecName" placeholder="Who/What? (e.g. ATM)" class="flex-1 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning text-white">
+                    <input id="newRecAmt" type="number" placeholder="Amount (₹)" class="w-full sm:w-24 min-w-0 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-warning text-white">
                     <button id="addReceivable" class="bg-warning hover:bg-amber-400 text-dark px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1 text-sm w-full sm:w-auto flex-shrink-0">
                         <i data-lucide="plus" class="w-4 h-4"></i> Add
                     </button>
                 </div>
             </div>
             <!-- List -->
-            <div id="receivablesBody" class="flex flex-col divide-y divide-slate-800/50 p-2 text-sm"></div>
+            <div id="receivablesBody" class="flex flex-col text-sm"></div>
         </div>
 
     </div>
@@ -397,12 +497,12 @@
     <!-- General Dialog Modal -->
     <div id="dialogModal" class="fixed inset-0 bg-black/80 z-[300] hidden flex items-center justify-center p-4 backdrop-blur-sm no-print">
         <div class="bg-card border border-slate-700 rounded-xl p-6 w-full max-w-sm shadow-2xl">
-            <h3 id="dialogTitle" class="text-lg font-bold mb-2">Title</h3>
+            <h3 id="dialogTitle" class="text-lg font-bold mb-2 text-white">Title</h3>
             <p id="dialogMessage" class="text-sm text-slate-400 mb-4">Message</p>
-            <input id="dialogInput" type="text" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary mb-4 hidden" autocomplete="off">
+            <input id="dialogInput" type="text" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary mb-4 hidden text-white" autocomplete="off">
             <div class="flex justify-end gap-2">
-                <button id="dialogCancel" class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700 transition-colors">Cancel</button>
-                <button id="dialogConfirm" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">Confirm</button>
+                <button id="dialogCancel" class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-800 hover:bg-slate-700 transition-colors text-white">Cancel</button>
+                <button id="dialogConfirm" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-white">Confirm</button>
             </div>
         </div>
     </div>
@@ -634,6 +734,7 @@
             const opt = document.createElement('option');
             opt.value = id;
             opt.textContent = store.timelines[id].title;
+            opt.className = "bg-slate-800 text-white font-medium"; // Explicit styling for options
             if (id === store.activeId) opt.selected = true;
             select.appendChild(opt);
         });
@@ -912,18 +1013,20 @@
         container.innerHTML = '';
         
         if(arr.length === 0) {
-            container.innerHTML = `<div class="p-6 text-center text-slate-500 italic text-sm print:text-left print:p-2 print:text-black">No entries yet.</div>`;
+            container.innerHTML = `<div class="p-6 text-center text-slate-500 italic text-sm">No entries yet.</div>`;
             return;
         }
 
         arr.forEach((x) => {
             const card = document.createElement('div');
-            card.className = "flex flex-col p-3 gap-2 border-b border-slate-800/50 bg-slate-800/10";
+            card.className = "print-item flex flex-col p-3 gap-2 border-b border-slate-800/50 bg-slate-800/10";
             
+            const hasNotes = x.notes && x.notes.trim() !== '';
             const imagesList = x.imgs || [];
+            
             let imagesHTML = imagesList.map((src, imgIdx) => `
                 <div class="relative inline-block flex-shrink-0 mt-1 print:mt-0 print:mr-2">
-                    <img class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-md cursor-pointer border border-slate-700 shadow-sm print:border-slate-300 print:shadow-none" src="${src}" onclick="openModal('${src}')" title="Click to view">
+                    <img class="w-12 h-12 md:w-14 md:h-14 object-cover rounded-md cursor-pointer border border-slate-700 shadow-sm" src="${src}" onclick="openModal('${src}')" title="Click to view">
                     <button onclick="removeImage('${arrName}', '${x.id}', ${imgIdx})" class="absolute -top-2 -right-2 bg-danger text-white rounded-full w-5 h-5 flex items-center justify-center shadow-md no-print">
                         <i data-lucide="x" class="w-3 h-3"></i>
                     </button>
@@ -931,36 +1034,46 @@
             `).join('');
 
             card.innerHTML = `
-                <!-- Top Row: Name & Amount -->
-                <div class="flex justify-between items-start gap-2">
-                    <input oninput="updateItem('${arrName}', '${x.id}', 'name', this.value)" class="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 font-medium truncate print-text font-bold text-base print:whitespace-normal print:break-words" value="${x.name}">
-                    <div class="flex items-center gap-1 font-bold text-base print-text flex-shrink-0 print:text-lg">
-                        <span class="text-slate-500 print:text-black">₹</span>
-                        <input oninput="updateItem('${arrName}', '${x.id}', 'amt', this.value)" type="number" class="w-20 md:w-24 min-w-0 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 text-right print:w-auto" value="${x.amt}">
-                    </div>
-                </div>
-                
-                <!-- Middle Row: Notes -->
-                <div class="${x.notes ? '' : 'print:hidden'}">
-                    <textarea oninput="updateItem('${arrName}', '${x.id}', 'notes', this.value)" rows="1" class="w-full bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 text-xs text-slate-400 print-text print:text-sm print:text-slate-700 print:pb-2" placeholder="Add notes...">${x.notes || ''}</textarea>
-                </div>
-                
-                <!-- Bottom Row: Images & Actions -->
-                <div class="flex justify-between items-end gap-2 mt-1 print:mt-0 print:pt-2">
-                    <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1 print:pb-0">
-                        ${imagesHTML}
-                        <div class="flex gap-1.5 no-print mt-1">
-                            <button onclick="openScannerUI('${arrName}', '${x.id}')" class="bg-slate-700 hover:bg-slate-600 text-primary rounded-md px-2 py-1 flex flex-col items-center justify-center transition-colors text-[10px] w-12 md:w-14 h-11 md:h-12 shadow-sm" title="Scan with Camera">
-                                <i data-lucide="camera" class="w-4 h-4 mb-0.5"></i> Scan
-                            </button>
-                            <button onclick="addImageHandler('${arrName}', '${x.id}', false)" class="bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-md px-2 py-1 flex flex-col items-center justify-center transition-colors text-[10px] w-12 md:w-14 h-11 md:h-12 shadow-sm" title="Upload File">
-                                <i data-lucide="image" class="w-4 h-4 mb-0.5"></i> File
-                            </button>
+                <!-- SCREEN UI -->
+                <div class="no-print flex flex-col gap-2 w-full">
+                    <div class="flex justify-between items-start gap-2">
+                        <input oninput="updateItem('${arrName}', '${x.id}', 'name', this.value)" class="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 font-bold text-base text-white truncate" value="${x.name}">
+                        <div class="flex items-center gap-1 font-bold text-base flex-shrink-0 text-white">
+                            <span class="text-slate-500">₹</span>
+                            <input oninput="updateItem('${arrName}', '${x.id}', 'amt', this.value)" type="number" class="w-20 md:w-24 min-w-0 bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 text-right" value="${x.amt}">
                         </div>
                     </div>
-                    <button onclick="removeEntry('${arrName}', '${x.id}')" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-danger p-2.5 rounded-md transition-colors flex-shrink-0 no-print shadow-sm mb-1" title="Delete Entry">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
+                    
+                    <div class="${hasNotes ? '' : 'hidden'}">
+                        <textarea oninput="updateItem('${arrName}', '${x.id}', 'notes', this.value)" rows="1" class="w-full bg-transparent border-b border-transparent hover:border-slate-700 focus:border-primary outline-none transition-all py-1 text-xs text-slate-400" placeholder="Add notes...">${x.notes || ''}</textarea>
+                    </div>
+                    
+                    <div class="flex justify-between items-end gap-2 mt-1">
+                        <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
+                            ${imagesHTML}
+                            <div class="flex gap-1.5 mt-1">
+                                <button onclick="openScannerUI('${arrName}', '${x.id}')" class="bg-slate-700 hover:bg-slate-600 text-primary rounded-md px-2 py-1 flex flex-col items-center justify-center transition-colors text-[10px] w-12 md:w-14 h-11 md:h-12 shadow-sm" title="Scan with Camera">
+                                    <i data-lucide="camera" class="w-4 h-4 mb-0.5"></i> Scan
+                                </button>
+                                <button onclick="addImageHandler('${arrName}', '${x.id}', false)" class="bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-md px-2 py-1 flex flex-col items-center justify-center transition-colors text-[10px] w-12 md:w-14 h-11 md:h-12 shadow-sm" title="Upload File">
+                                    <i data-lucide="image" class="w-4 h-4 mb-0.5"></i> File
+                                </button>
+                            </div>
+                        </div>
+                        <button onclick="removeEntry('${arrName}', '${x.id}')" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-danger p-2.5 rounded-md transition-colors flex-shrink-0 shadow-sm mb-1" title="Delete Entry">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PRINT UI (Uses plain text instead of inputs so long text wraps beautifully) -->
+                <div class="print-only-block w-full">
+                    <div class="print-item-top">
+                        <div class="print-item-name">${x.name}</div>
+                        <div class="print-item-amt">₹${Number(x.amt).toLocaleString('en-IN')}</div>
+                    </div>
+                    ${hasNotes ? `<div class="print-item-notes">${x.notes}</div>` : ''}
+                    ${imagesList.length > 0 ? `<div class="print-item-images mt-2">${imagesHTML}</div>` : ''}
                 </div>
             `;
             
@@ -974,6 +1087,7 @@
     function render() {
         populateTimelines();
         $('startingAmount').value = data.startingAmount || 0;
+        $('printStartingAmt').textContent = Number(data.startingAmount || 0).toLocaleString('en-IN');
         
         if(!data.incomes) data.incomes = [];
         data.incomes.forEach(x => { if(!x.id) x.id = generateId(); if(!x.imgs) x.imgs=[]; });
@@ -988,7 +1102,11 @@
     }
 
     // --- Bind Global Inputs & Buttons ---
-    $('startingAmount').oninput = e => { data.startingAmount = Number(e.target.value || 0); calc(); }
+    $('startingAmount').oninput = e => { 
+        data.startingAmount = Number(e.target.value || 0); 
+        $('printStartingAmt').textContent = data.startingAmount.toLocaleString('en-IN');
+        calc(); 
+    }
     
     function handleAdd(nameId, amtId, arrName) {
         const name = $(nameId).value;
